@@ -44,6 +44,7 @@ var FieldTypes = map[string]func(s string, report *BillingReport) interface{}{
 	"UnBlendedRate":          ParseFloat,
 	"UnBlendedCost":          ParseFloat,
 	"TotalCost":              ParseFloat,
+	"Cost":                   ParseFloat,
 	"CostBeforeTax":          ParseFloat,
 	"Credits":                ParseFloat,
 	"UsageStartDate":         ParseDate,
@@ -160,8 +161,8 @@ func ParseRecord(in chan []string, out chan map[string]interface{}, report *Bill
 				parsedValue = f(values[i], report)
 				record[field] = parsedValue
 			} else if tagMatcher.MatchString(field) {
-				record["Tags"].(map[string]interface{})[ParseTag(field, report).(string)] = values[i]
-				parsedValue = values[i]
+				record["Tags"].(map[string]interface{})[ParseTag(field, report).(string)] = strings.ToLower(values[i])
+				parsedValue = strings.ToLower(values[i])
 			} else {
 				record[field] = values[i]
 				parsedValue = values[i]
